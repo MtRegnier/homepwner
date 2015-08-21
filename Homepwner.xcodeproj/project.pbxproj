@@ -15,6 +15,7 @@
 		350AC28E1B857A4C000F9E74 /* BNRItemsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 350AC28D1B857A4C000F9E74 /* BNRItemsViewController.m */; };
 		350AC2911B857D6F000F9E74 /* BNRItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 350AC2901B857D6F000F9E74 /* BNRItem.m */; };
 		350AC2941B858039000F9E74 /* BNRItemStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 350AC2931B858039000F9E74 /* BNRItemStore.m */; };
+		3524FBD11B87C38000F2CA2E /* BackgroundImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3524FBD01B87C38000F2CA2E /* BackgroundImage.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		350AC2901B857D6F000F9E74 /* BNRItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNRItem.m; sourceTree = "<group>"; };
 		350AC2921B858039000F9E74 /* BNRItemStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNRItemStore.h; sourceTree = "<group>"; };
 		350AC2931B858039000F9E74 /* BNRItemStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNRItemStore.m; sourceTree = "<group>"; };
+		3524FBD01B87C38000F2CA2E /* BackgroundImage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = BackgroundImage.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +96,7 @@
 				350AC28D1B857A4C000F9E74 /* BNRItemsViewController.m */,
 				350AC2901B857D6F000F9E74 /* BNRItem.m */,
 				350AC2931B858039000F9E74 /* BNRItemStore.m */,
+				3524FBD01B87C38000F2CA2E /* BackgroundImage.jpg */,
 				350AC2751B857773000F9E74 /* LaunchScreen.xib */,
 				350AC26C1B857773000F9E74 /* Supporting Files */,
 			);
@@ -208,6 +211,7 @@
 			files = (
 				350AC2771B857773000F9E74 /* LaunchScreen.xib in Resources */,
 				350AC2741B857773000F9E74 /* Images.xcassets in Resources */,
+				3524FBD11B87C38000F2CA2E /* BackgroundImage.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,6 +420,7 @@
 				350AC2881B857773000F9E74 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		350AC2891B857773000F9E74 /* Build configuration list for PBXNativeTarget "HomepwnerTests" */ = {
 			isa = XCConfigurationList;
@@ -424,6 +429,7 @@
 				350AC28B1B857773000F9E74 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

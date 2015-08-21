@@ -21,6 +21,7 @@
     // Creating BNRItemsViewController
     BNRItemsViewController *itemsViewController = [[BNRItemsViewController alloc] init];
     
+    
     // Placing in view hierarchy
     self.window.rootViewController = itemsViewController;
     
