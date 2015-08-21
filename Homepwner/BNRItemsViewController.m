@@ -33,22 +33,61 @@
 
 // Table view setup
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[[BNRItemStore sharedStore] allItems] count];
+    NSMutableArray *workingItems = [[[BNRItemStore sharedStore] allItems] mutableCopy];
+    NSMutableArray *highValueItems = [[NSMutableArray alloc] init];
+    for (int i = 0; i < [workingItems count]; i++) {
+        BNRItem *loopItem = workingItems[i];
+        if (loopItem.valueInDollars > 50) {
+            [highValueItems addObject:loopItem];
+        }
+    }
+    
+    if (section == 0) {
+        return [highValueItems count];
+        workingItems = nil;
+        highValueItems = nil;
+    } else {
+        return [[[BNRItemStore sharedStore] allItems] count] - [highValueItems count];
+        workingItems = nil;
+        highValueItems = nil;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Setting up an instance of the cell
-//    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
     
     // Reusing cells instead
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
     
     // Setting cell text (description)
-    NSArray *items = [[BNRItemStore sharedStore] allItems];
-    BNRItem *item = items[indexPath.row];
+    // Split into two arrays?
+    
+    NSMutableArray *workingItems = [[[BNRItemStore sharedStore] allItems] mutableCopy];
+    NSMutableArray *highValueItems = [[NSMutableArray alloc] init];
+    NSMutableArray *lowValueItems = [[NSMutableArray alloc] init];
+    for (int i = 0; i < [workingItems count]; i++) {
+        BNRItem *loopItem = workingItems[i];
+        if (loopItem.valueInDollars > 50) {
+            [highValueItems addObject:loopItem];
+        } else {
+            [lowValueItems addObject:loopItem];
+        }
+    }
+    BNRItem *item = [[BNRItem alloc] init];
+    if (indexPath.section == 0) {
+        item = highValueItems[indexPath.row];
+    } else if (indexPath.section == 1) {
+        item = lowValueItems[indexPath.row];
+    }
     
     cell.textLabel.text = [item description];
     
