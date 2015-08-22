@@ -9,6 +9,7 @@
 #import "BNRItemsViewController.h"
 #import "BNRItemStore.h"
 #import "BNRItem.h"
+#import "BNRDetailViewController.h"
 
 @interface BNRItemsViewController ()
 
@@ -201,15 +202,38 @@
 {
     // Setting up index path for 0th section, last row
     // Not doing this any more!
-//    NSInteger lastRow = [self.tableView numberOfRowsInSection:0];
+    
     
     // Creating a new item instead
-    BNRItem *newItem = [[BNRItemStore sharedStore] createItem];
-    
-    NSInteger lastRow = [[[BNRItemStore sharedStore] allItems] indexOfObject:newItem];
+    BNRItem *newItem;
+    newItem = [[BNRItemStore sharedStore] createItem];
+    NSUInteger sectionPath = 0;
+    NSUInteger lastRow = 0;
+    NSMutableArray *workingItems = [[[BNRItemStore sharedStore] allItems] mutableCopy];
+    NSMutableArray *highValueItems = [[NSMutableArray alloc] init];
+    NSMutableArray *lowValueItems = [[NSMutableArray alloc] init];
+    if ([workingItems count]) {
+        for (int i = 0; i < [workingItems count]; i++) {
+            BNRItem *loopItem = workingItems[i];
+            if (loopItem.valueInDollars > 50) {
+                [highValueItems addObject:loopItem];
+                lastRow = [highValueItems indexOfObjectIdenticalTo:loopItem];
+                sectionPath = 0;
+            } else {
+                [lowValueItems addObject:loopItem];
+                if (self.tableView.numberOfSections == 3) {
+                    sectionPath = 1;
+                }
+                lastRow = [lowValueItems indexOfObjectIdenticalTo:loopItem];
+                if (lastRow > 1) {
+                    lastRow -= 1;
+                }
+            }
+        }
+    }
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lastRow
-                                                inSection:0];
+                                                inSection:sectionPath];
     
     // Adding this row to the table
     [self.tableView insertRowsAtIndexPaths:@[indexPath] 
@@ -253,7 +277,7 @@
         BNRItem *item = items[indexPath.row];
         [[BNRItemStore sharedStore] removeItem:item];
         
-        //Get rid of the item on the table veiw as well
+        //Get rid of the item on the table view as well
         [tableView deleteRowsAtIndexPaths:@[indexPath] 
                          withRowAnimation:UITableViewRowAnimationFade];
         
@@ -264,6 +288,7 @@
 {
     [[BNRItemStore sharedStore] moveItemAtIndex:sourceIndexPath.row 
                                         toIndex:destinationIndexPath.row];
+//    NSLog(@"section: %ld, row:%ld", (long)destinationIndexPath.section, (long)destinationIndexPath.row);
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -271,6 +296,45 @@
     return @"Remove";
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView
+targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath
+                toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    if (sourceIndexPath.section != proposedDestinationIndexPath.section) {
+        return sourceIndexPath;
+    } else {
+        return proposedDestinationIndexPath;
+    }
+}
+
+- (BOOL)tableView:(UITableView *)tableView
+canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (tableView.numberOfSections == 2) {
+        if (indexPath.section == 0) {
+            return YES;
+        } else {
+            return NO;
+        }
+    } else if (tableView.numberOfSections == 3) {
+        if (indexPath.section == 2) {
+            return NO;
+        } else {
+            return YES;
+        }
+    } else {
+        return NO;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    BNRDetailViewController *detailViewController = [[BNRDetailViewController alloc] init];
+    
+    // Place on top of navController's stack
+    [self.navigationController pushViewController:detailViewController animated:YES];
+    
+}
 
 @end
 // The following white space is brought to you by Dane's disdain for staring at the bottom of his screen

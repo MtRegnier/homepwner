@@ -21,10 +21,14 @@
     // Creating BNRItemsViewController
     BNRItemsViewController *itemsViewController = [[BNRItemsViewController alloc] init];
     
+    // Setting up navigation controller
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:itemsViewController];
     
     // Placing in view hierarchy
-    self.window.rootViewController = itemsViewController;
+//    self.window.rootViewController = itemsViewController;
     
+    // Putting the nav view in the hierarchy
+    self.window.rootViewController = navController;
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
