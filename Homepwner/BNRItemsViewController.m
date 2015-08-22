@@ -13,7 +13,7 @@
 
 @interface BNRItemsViewController ()
 
-@property (nonatomic, strong) IBOutlet UIView *headerView;
+
 
 @end
 
@@ -29,6 +29,17 @@
             [[BNRItemStore sharedStore] createItem];
         }
     }
+    // Setting up the nav bar
+    UINavigationItem *navItem = self.navigationItem;
+    navItem.title = @"Homepwner";
+    
+    // Create a bar button for adding new items
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                         target:self 
+                                                                         action:@selector(addNewItem:)];
+    navItem.rightBarButtonItem = bbi;
+    navItem.leftBarButtonItem = self.editButtonItem;
+    
     return self;
 }
 
@@ -44,9 +55,6 @@
     [super viewDidLoad];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
-    
-    UIView *header = self.headerView;
-    [self.tableView setTableHeaderView:header];
 }
 
 // Table view setup
@@ -241,34 +249,6 @@
     
 }
 
-- (IBAction)toggleEditMode:(id)sender
-{
-    // Checking to see if editing is in progress
-    if (self.isEditing) {
-        // Change the text of the button to let the user know they are no longer editing
-        [sender setTitle:@"Edit" forState:UIControlStateNormal];
-        
-        // Turn off editing mode
-        [self setEditing:NO animated:YES];
-    } else {
-        // Change title to show user editing has begun
-        [sender setTitle:@"Done" forState:UIControlStateNormal];
-        
-        [self setEditing:YES animated:YES];
-    }
-}
-
-- (UIView *)headerView
-{
-    if (!_headerView) {
-        // Loading up the XIB
-        [[NSBundle mainBundle] loadNibNamed:@"HeaderView" 
-                                      owner:self 
-                                    options:nil];
-    }
-    return _headerView;
-}
-
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Check to see if the view wants to commit a delete
@@ -331,10 +311,45 @@ canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     BNRDetailViewController *detailViewController = [[BNRDetailViewController alloc] init];
     
+    NSMutableArray *workingItems = [[[BNRItemStore sharedStore] allItems] mutableCopy];
+    NSMutableArray *highValueItems = [[NSMutableArray alloc] init];
+    NSMutableArray *lowValueItems = [[NSMutableArray alloc] init];
+    if ([workingItems count]) {
+        for (int i = 0; i < [workingItems count]; i++) {
+            BNRItem *loopItem = workingItems[i];
+            if (loopItem.valueInDollars > 50) {
+                [highValueItems addObject:loopItem];
+            } else {
+                [lowValueItems addObject:loopItem];
+            }
+        }
+    }
+    BNRItem *selectedItem;
+    if (tableView.numberOfSections == 2) {
+         selectedItem = workingItems[indexPath.row];
+    } else if (tableView.numberOfSections == 3) {
+        if (indexPath.section == 0) {
+            selectedItem = highValueItems[indexPath.row];
+        } else if (indexPath.section == 1) {
+            selectedItem = lowValueItems[indexPath.row];
+        }
+    }
+        
+    
+    detailViewController.item = selectedItem;
+    
     // Place on top of navController's stack
     [self.navigationController pushViewController:detailViewController animated:YES];
     
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.tableView reloadData];
+}
+
 
 @end
 // The following white space is brought to you by Dane's disdain for staring at the bottom of his screen
