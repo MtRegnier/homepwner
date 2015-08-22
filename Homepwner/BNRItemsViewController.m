@@ -10,6 +10,12 @@
 #import "BNRItemStore.h"
 #import "BNRItem.h"
 
+@interface BNRItemsViewController ()
+
+@property (nonatomic, strong) IBOutlet UIView *headerView;
+
+@end
+
 @implementation BNRItemsViewController
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-designated-initializers"
@@ -17,9 +23,10 @@
 {
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
-        for (int i = 0; i < 5; i++) {
-            [[BNRItemStore sharedStore] createItem];
-        }
+        // No longer needed, use new button instead
+//        for (int i = 0; i < 5; i++) {
+//            [[BNRItemStore sharedStore] createItem];
+//        }
     }
     return self;
 }
@@ -185,3 +192,18 @@
 }
 
 @end
+// The following white space is brought to you by Dane's disdain for staring at the bottom of his screen
+
+
+
+
+
+
+
+
+
+
+
+
+
+
