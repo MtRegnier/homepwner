@@ -141,6 +141,12 @@
                                         toIndex:destinationIndexPath.row];
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"Remove";
+}
+
+
 @end
 // The following white space is brought to you by Dane's disdain for staring at the bottom of his screen
 
