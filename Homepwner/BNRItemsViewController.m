@@ -23,10 +23,10 @@
 {
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
-        // No longer needed, use new button instead
-//        for (int i = 0; i < 5; i++) {
-//            [[BNRItemStore sharedStore] createItem];
-//        }
+//         No longer needed, use new button instead
+        for (int i = 0; i < 5; i++) {
+            [[BNRItemStore sharedStore] createItem];
+        }
     }
     return self;
 }
@@ -41,9 +41,11 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    // Setting background image 
-    UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundImage.jpg"]];
-    self.tableView.backgroundView = backgroundImage;
+    
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
+    
+    UIView *header = self.headerView;
+    [self.tableView setTableHeaderView:header];
 }
 
 // Table view setup
@@ -78,12 +80,14 @@
     NSMutableArray *workingItems = [[[BNRItemStore sharedStore] allItems] mutableCopy];
     NSMutableArray *highValueItems = [[NSMutableArray alloc] init];
     NSMutableArray *lowValueItems = [[NSMutableArray alloc] init];
-    for (int i = 0; i < [workingItems count]; i++) {
-        BNRItem *loopItem = workingItems[i];
-        if (loopItem.valueInDollars > 50) {
-            [highValueItems addObject:loopItem];
-        } else {
-            [lowValueItems addObject:loopItem];
+    if ([workingItems count]) {
+        for (int i = 0; i < [workingItems count]; i++) {
+            BNRItem *loopItem = workingItems[i];
+            if (loopItem.valueInDollars > 50) {
+                [highValueItems addObject:loopItem];
+            } else {
+                [lowValueItems addObject:loopItem];
+            }
         }
     }
     // Put sectionCount here to make sure the right number of sections were being created
@@ -121,24 +125,26 @@
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
     
     // Reusing cells instead
-    // This throws an exception if used alone, but is documented as the DI
-    // throw an if check on the original initializer! Should fix crash.
-    
 //    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
+    
+    // Setting cell text (description)
+    NSArray *items = [[BNRItemStore sharedStore] allItems];
+    BNRItem *item = items[indexPath.row];
     
     // Doing the item split    
     NSMutableArray *workingItems = [[[BNRItemStore sharedStore] allItems] mutableCopy];
     NSMutableArray *highValueItems = [[NSMutableArray alloc] init];
     NSMutableArray *lowValueItems = [[NSMutableArray alloc] init];
-    for (int i = 0; i < [workingItems count]; i++) {
-        BNRItem *loopItem = workingItems[i];
-        if (loopItem.valueInDollars > 50) {
-            [highValueItems addObject:loopItem];
-        } else {
-            [lowValueItems addObject:loopItem];
+    if ([workingItems count]) {
+        for (int i = 0; i < [workingItems count]; i++) {
+            BNRItem *loopItem = workingItems[i];
+            if (loopItem.valueInDollars > 50) {
+                [highValueItems addObject:loopItem];
+            } else {
+                [lowValueItems addObject:loopItem];
+            }
         }
     }
-    BNRItem *item = [[BNRItem alloc] init];
     // If one section, use the constant row, set label explicitly
     if (tableView.numberOfSections == 1) {
         cell.textLabel.text = @"No more items!";
@@ -190,6 +196,81 @@
         return 0.0;
     }
 }
+  
+- (IBAction)addNewItem:(id)sender
+{
+    // Setting up index path for 0th section, last row
+    // Not doing this any more!
+//    NSInteger lastRow = [self.tableView numberOfRowsInSection:0];
+    
+    // Creating a new item instead
+    BNRItem *newItem = [[BNRItemStore sharedStore] createItem];
+    
+    NSInteger lastRow = [[[BNRItemStore sharedStore] allItems] indexOfObject:newItem];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lastRow
+                                                inSection:0];
+    
+    // Adding this row to the table
+    [self.tableView insertRowsAtIndexPaths:@[indexPath] 
+                          withRowAnimation:UITableViewRowAnimationTop];
+    
+}
+
+- (IBAction)toggleEditMode:(id)sender
+{
+    // Checking to see if editing is in progress
+    if (self.isEditing) {
+        // Change the text of the button to let the user know they are no longer editing
+        [sender setTitle:@"Edit" forState:UIControlStateNormal];
+        
+        // Turn off editing mode
+        [self setEditing:NO animated:YES];
+    } else {
+        // Change title to show user editing has begun
+        [sender setTitle:@"Done" forState:UIControlStateNormal];
+        
+        [self setEditing:YES animated:YES];
+    }
+}
+
+- (UIView *)headerView
+{
+    if (!_headerView) {
+        // Loading up the XIB
+        [[NSBundle mainBundle] loadNibNamed:@"HeaderView" 
+                                      owner:self 
+                                    options:nil];
+    }
+    return _headerView;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Check to see if the view wants to commit a delete
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSArray *items = [[BNRItemStore sharedStore] allItems];
+        BNRItem *item = items[indexPath.row];
+        [[BNRItemStore sharedStore] removeItem:item];
+        
+        //Get rid of the item on the table veiw as well
+        [tableView deleteRowsAtIndexPaths:@[indexPath] 
+                         withRowAnimation:UITableViewRowAnimationFade];
+        
+    }
+}
+
+- (void)tableView:UITableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    [[BNRItemStore sharedStore] moveItemAtIndex:sourceIndexPath.row 
+                                        toIndex:destinationIndexPath.row];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"Remove";
+}
+
 
 @end
 // The following white space is brought to you by Dane's disdain for staring at the bottom of his screen
