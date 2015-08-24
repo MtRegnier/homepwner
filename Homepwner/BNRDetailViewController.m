@@ -94,7 +94,14 @@
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
     // If there is a camera available, use it, if not grab from library
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        
         imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        CGRect overlayBounds = CGRectMake(87.0, 234.0, 200.0, 200.0);
+        UIImageView *crosshairs = [[UIImageView alloc] initWithFrame:overlayBounds];
+        crosshairs.image = [UIImage imageNamed:@"Bigger-Small-Crosshairs.png"];
+        crosshairs.alpha = 0.5f;
+        imagePicker.cameraOverlayView = crosshairs;
+        
     } else {
         imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
@@ -129,6 +136,12 @@
 }
 - (IBAction)backgroundTapped:(id)sender {
     [self.view endEditing:YES];
+}
+- (IBAction)trashImage:(id)sender {
+    
+    [[BNRImageStore sharedStore] deleteImageForKey:self.item.itemKey];
+    
+    self.imageView.image = nil;
 }
 
 @end

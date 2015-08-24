@@ -21,6 +21,7 @@
 		357EEC9E1B890A84005603CC /* BNRDateChangeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 357EEC9C1B890A84005603CC /* BNRDateChangeViewController.m */; };
 		357EEC9F1B890A84005603CC /* BNRDateChangeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 357EEC9D1B890A84005603CC /* BNRDateChangeViewController.xib */; };
 		359E56C91B8A386600CD5D4A /* BNRImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E56C81B8A386600CD5D4A /* BNRImageStore.m */; };
+		35FA12F71B8B9EB000F559BA /* Bigger-Small-Crosshairs.png in Resources */ = {isa = PBXBuildFile; fileRef = 35FA12F61B8B9EB000F559BA /* Bigger-Small-Crosshairs.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		357EEC9D1B890A84005603CC /* BNRDateChangeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BNRDateChangeViewController.xib; sourceTree = "<group>"; };
 		359E56C71B8A386600CD5D4A /* BNRImageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNRImageStore.h; sourceTree = "<group>"; };
 		359E56C81B8A386600CD5D4A /* BNRImageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNRImageStore.m; sourceTree = "<group>"; };
+		35FA12F61B8B9EB000F559BA /* Bigger-Small-Crosshairs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bigger-Small-Crosshairs.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 		350AC26C1B857773000F9E74 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				35FA12F61B8B9EB000F559BA /* Bigger-Small-Crosshairs.png */,
 				350AC26D1B857773000F9E74 /* Info.plist */,
 				350AC26E1B857773000F9E74 /* main.m */,
 			);
@@ -230,6 +233,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35FA12F71B8B9EB000F559BA /* Bigger-Small-Crosshairs.png in Resources */,
 				357EEC9F1B890A84005603CC /* BNRDateChangeViewController.xib in Resources */,
 				350AC2771B857773000F9E74 /* LaunchScreen.xib in Resources */,
 				350AC2741B857773000F9E74 /* Images.xcassets in Resources */,
