@@ -7,15 +7,17 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BNRDetailViewController">
             <connections>
                 <outlet property="dateLabel" destination="I6F-Pc-ftx" id="y1L-45-NXG"/>
+                <outlet property="imageView" destination="xrf-EK-9Gl" id="xhV-wl-4xY"/>
                 <outlet property="nameField" destination="6kt-fj-nrw" id="Q4F-T7-kbl"/>
                 <outlet property="serialField" destination="tt5-sR-Eck" id="iLc-bh-QYL"/>
+                <outlet property="toolbar" destination="yIK-QD-VSg" id="CHe-N4-baP"/>
                 <outlet property="valueField" destination="Ppr-Fo-i8W" id="uwj-8R-ZMr"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cZE-aR-Yim">
@@ -24,7 +26,7 @@
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                     <variation key="widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="8" y="140" width="46" height="21"/>
+                        <rect key="frame" x="8" y="94" width="46" height="21"/>
                     </variation>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Serial" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fSH-de-9Rx">
@@ -33,7 +35,7 @@
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                     <variation key="widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="8" y="179" width="43" height="21"/>
+                        <rect key="frame" x="8" y="133" width="43" height="21"/>
                     </variation>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="erP-1S-kg8">
@@ -42,7 +44,7 @@
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                     <variation key="widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="8" y="218" width="42" height="21"/>
+                        <rect key="frame" x="8" y="172" width="42" height="21"/>
                     </variation>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I6F-Pc-ftx">
@@ -51,7 +53,7 @@
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                     <variation key="widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="8" y="262" width="352" height="21"/>
+                        <rect key="frame" x="8" y="216" width="352" height="21"/>
                     </variation>
                 </label>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6kt-fj-nrw">
@@ -59,7 +61,7 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                     <variation key="widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="76" y="136" width="291" height="30"/>
+                        <rect key="frame" x="76" y="90" width="291" height="30"/>
                     </variation>
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tt5-sR-Eck">
@@ -67,7 +69,7 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                     <variation key="widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="76" y="175" width="291" height="30"/>
+                        <rect key="frame" x="76" y="129" width="291" height="30"/>
                     </variation>
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ppr-Fo-i8W">
@@ -75,13 +77,43 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                     <variation key="widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="76" y="214" width="291" height="30"/>
+                        <rect key="frame" x="76" y="168" width="291" height="30"/>
                     </variation>
                 </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NZu-W2-SJZ">
+                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                    <state key="normal" title="Change Date">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="widthClass=compact" fixedFrame="YES">
+                        <rect key="frame" x="139" y="255" width="90" height="30"/>
+                    </variation>
+                    <connections>
+                        <action selector="changeDate:" destination="-1" eventType="touchUpInside" id="ebk-um-yRv"/>
+                    </connections>
+                </button>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yIK-QD-VSg">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                    <items>
+                        <barButtonItem systemItem="camera" id="T6N-LZ-hpa">
+                            <connections>
+                                <action selector="takePicture:" destination="-1" id="7WM-Y9-o7S"/>
+                            </connections>
+                        </barButtonItem>
+                    </items>
+                    <variation key="widthClass=compact" fixedFrame="YES">
+                        <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                    </variation>
+                </toolbar>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xrf-EK-9Gl">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <variation key="widthClass=compact" fixedFrame="YES">
+                        <rect key="frame" x="8" y="301" width="359" height="307"/>
+                    </variation>
+                </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
             <variation key="default">
@@ -93,6 +125,9 @@
                     <exclude reference="6kt-fj-nrw"/>
                     <exclude reference="tt5-sR-Eck"/>
                     <exclude reference="Ppr-Fo-i8W"/>
+                    <exclude reference="NZu-W2-SJZ"/>
+                    <exclude reference="yIK-QD-VSg"/>
+                    <exclude reference="xrf-EK-9Gl"/>
                 </mask>
             </variation>
             <variation key="widthClass=compact">
@@ -104,6 +139,9 @@
                     <include reference="6kt-fj-nrw"/>
                     <include reference="tt5-sR-Eck"/>
                     <include reference="Ppr-Fo-i8W"/>
+                    <include reference="NZu-W2-SJZ"/>
+                    <include reference="yIK-QD-VSg"/>
+                    <include reference="xrf-EK-9Gl"/>
                 </mask>
             </variation>
             <point key="canvasLocation" x="267.5" y="402.5"/>

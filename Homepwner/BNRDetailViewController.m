@@ -7,14 +7,18 @@
 //
 
 #import "BNRDetailViewController.h"
+#import "BNRDateChangeViewController.h"
 #import "BNRItem.h"
+#import "BNRImageStore.h"
 
-@interface BNRDetailViewController ()
+@interface BNRDetailViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
 @property (weak, nonatomic) IBOutlet UITextField *serialField;
 @property (weak, nonatomic) IBOutlet UITextField *valueField;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
 @end
 
@@ -65,6 +69,42 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self.view endEditing:YES];
+}
+
+- (IBAction)changeDate:(id)sender {
+    
+    BNRDateChangeViewController *dateChangeViewController = [[BNRDateChangeViewController alloc] init];
+    
+    dateChangeViewController.item = self.item;
+    
+    [self.navigationController pushViewController:dateChangeViewController animated:YES];
+    
+}
+- (IBAction)takePicture:(id)sender {
+    
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    // If there is a camera available, use it, if not grab from library
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    } else {
+        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+    
+    imagePicker.delegate = self;
+    
+    [self presentViewController:imagePicker animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    // Grab the picked image from dictionary
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    
+    // Put it on the screen in the image view
+    self.imageView.image = image;
+    
+    // Take the picker off the screen
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

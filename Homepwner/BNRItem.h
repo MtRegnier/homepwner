@@ -9,14 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @interface BNRItem : NSObject
-// I miss properties
-{
-    NSString *_itemName;
-    NSString *_serialNumber;
-    int _valueInDollars;
-    NSDate *_dateCreated;
-    
-}
+
+@property (strong, nonatomic) NSDate *dateCreated;
+@property (strong, nonatomic)NSString *itemName;
+@property (strong, nonatomic)NSString *serialNumber;
+@property (nonatomic)int valueInDollars;
+@property (nonatomic, copy)NSString *itemKey;
 
 + (instancetype)randomItem;
 
@@ -26,17 +24,7 @@
 - (instancetype)initWithItemName:(NSString *)name;
 - (instancetype)initWithItemName:(NSString *)name serialNumber:(NSString *)sNumber;
 
-- (void)setItemName:(NSString *)str;
-- (NSString *)itemName;
-
-- (void)setSerialNumber:(NSString *)str;
-- (NSString *)serialNumber;
-
-- (void)setValueInDollars:(int)v;
-- (int)valueInDollars;
-
 // Read Only
-- (NSDate *)dateCreated;
-
+- (void)setDateCreated:(NSDate *)date;
 
 @end
