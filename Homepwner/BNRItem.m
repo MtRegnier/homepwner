@@ -61,6 +61,11 @@
         // Setting the date created to today
         _dateCreated = [[NSDate alloc] init];
         
+        // Creating a unique identifier for each item
+        NSUUID *uuid = [[NSUUID alloc] init];
+        NSString *key = [uuid UUIDString];
+        _itemKey = key;
+        
     }
     // Returning the address of our new object
     return self;

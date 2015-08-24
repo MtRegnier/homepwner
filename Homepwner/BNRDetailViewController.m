@@ -11,7 +11,7 @@
 #import "BNRItem.h"
 #import "BNRImageStore.h"
 
-@interface BNRDetailViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface BNRDetailViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
 @property (weak, nonatomic) IBOutlet UITextField *serialField;
@@ -44,6 +44,15 @@
     
     // Use filtered NSDate object to set dateLabel contents
     self.dateLabel.text = [dateFormatter stringFromDate:item.dateCreated];
+    
+    NSString *imageKey = self.item.itemKey;
+    
+    // Get the image for the key from the store
+    UIImage *imageToDisplay = [[BNRImageStore sharedStore] imageForKey:imageKey];
+    
+    // Display that image in the imageView
+    self.imageView.image = imageToDisplay;
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -90,6 +99,8 @@
         imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
     
+    imagePicker.allowsEditing = YES;
+    
     imagePicker.delegate = self;
     
     [self presentViewController:imagePicker animated:YES completion:nil];
@@ -98,13 +109,26 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     // Grab the picked image from dictionary
-    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    UIImage *image = info[UIImagePickerControllerEditedImage];
+    
+    // Store the image for the key
+    [[BNRImageStore sharedStore] setImage:image
+                                   forKey:self.item.itemKey];
     
     // Put it on the screen in the image view
     self.imageView.image = image;
     
     // Take the picker off the screen
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+- (IBAction)backgroundTapped:(id)sender {
+    [self.view endEditing:YES];
 }
 
 @end
