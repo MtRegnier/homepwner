@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BNRItem : NSObject
+@interface BNRItem : NSObject <NSCoding>
 
 @property (strong, nonatomic) NSDate *dateCreated;
 @property (strong, nonatomic)NSString *itemName;

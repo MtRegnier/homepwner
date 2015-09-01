@@ -48,7 +48,15 @@
 {
     self = [super init];
     if (self) {
-        _privateItems = [[NSMutableArray alloc] init];
+        // Switching to saved data
+//        _privateItems = [[NSMutableArray alloc] init];
+        NSString *path = [self itemArchivePath];
+        _privateItems = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+        
+        // create privateItems if there isn't one to load
+        if (!_privateItems) {
+            _privateItems = [[NSMutableArray alloc] init];
+        }
     }
     
     return self;
@@ -94,5 +102,22 @@
     [self.privateItems insertObject:item atIndex:toIndex];
 }
 
+- (NSString *)itemArchivePath
+{
+    NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    // Get the one document directory from that list
+    NSString *documentDirectory = [documentDirectories firstObject];
+    
+    return [documentDirectory stringByAppendingPathComponent:@"items.archive"];
+}
+
+- (BOOL)saveChanges
+{
+    NSString *path = [self itemArchivePath];
+    
+    // Returns YES on success
+    return [NSKeyedArchiver archiveRootObject:self.privateItems toFile:path];
+}
 
 @end

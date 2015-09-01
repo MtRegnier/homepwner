@@ -7,6 +7,7 @@
 //
 
 #import "BNRImageStore.h"
+#import <UIKit/UIKit.h>
 
 @interface BNRImageStore ()
 
@@ -47,6 +48,12 @@
     
     if (self) {
         _dictionary = [[NSMutableDictionary alloc] init];
+        
+        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        [nc addObserver:self 
+               selector:@selector(clearCache:) 
+                   name:UIApplicationDidReceiveMemoryWarningNotification 
+                 object:nil];
     }
     
     return self;
@@ -56,14 +63,39 @@
 {
 //    [self.dictionary setObject:image forKey:key];
     // Short hand!
-    self.dictionary[key] = image;
+//    self.dictionary[key] = image;
+    NSString *imagePath = [self imagePathForKey:key];
+    
+    // Turn the image into JPEG
+    NSData *data = UIImageJPEGRepresentation(image, 0.5);
+    
+    // Writing it to path
+    [data writeToFile:imagePath atomically:YES];
 }
 
 - (UIImage *)imageForKey:(NSString *)key
 {
 //    return [self.dictionary objectForKey:key];
     // Short hand again!
-    return self.dictionary[key];
+//    return self.dictionary[key];
+    // Loading from file system
+    // Try finding it in the dictionary
+    UIImage *result = self.dictionary[key];
+    
+    if (!result) {
+        NSString *imagePath = [self imagePathForKey:key];
+        
+        // Create a UIImage from the file
+        result = [UIImage imageWithContentsOfFile:imagePath];
+        
+        if (result) {
+            self.dictionary[key] = result;
+        } else {
+            NSLog(@"Error: unable to find %@", [self imagePathForKey:key]);
+        }
+    }
+    
+    return result;
 }
 
 - (void)deleteImageForKey:(NSString *)key
@@ -72,9 +104,23 @@
         return;
     } 
     [self.dictionary removeObjectForKey:key];
+    
+    NSString *imagePath = [self imagePathForKey:key];
+    [[NSFileManager defaultManager] removeItemAtPath:imagePath error:nil];
 }
 
+- (NSString *)imagePathForKey:(NSString *)key
+{
+    NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = [documentDirectories firstObject];
+    return [documentDirectory stringByAppendingPathComponent:key];
+}
 
+- (void)clearCache:(NSNotification *)note
+{
+    NSLog(@"flushing %lu images out of the cache", [self.dictionary count]);
+    [self.dictionary removeAllObjects];
+}
 @end
 
 
