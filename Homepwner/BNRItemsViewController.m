@@ -23,12 +23,12 @@
 - (instancetype)init
 {
     self = [super initWithStyle:UITableViewStylePlain];
-    if (self) {
-//         No longer needed, use new button instead
-        for (int i = 0; i < 5; i++) {
-            [[BNRItemStore sharedStore] createItem];
-        }
-    }
+//    if (self) {
+////         No longer needed, use new button instead
+//        for (int i = 0; i < 5; i++) {
+//            [[BNRItemStore sharedStore] createItem];
+//        }
+//    }
     // Setting up the nav bar
     UINavigationItem *navItem = self.navigationItem;
     navItem.title = @"Homepwner";
@@ -135,10 +135,13 @@
     
     // Reusing cells instead
 //    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
-    
+    BNRItem *item;
     // Setting cell text (description)
     NSArray *items = [[BNRItemStore sharedStore] allItems];
-    BNRItem *item = items[indexPath.row];
+    if ([items count]) {
+        item = items[indexPath.row];
+    }
+    
     
     // Doing the item split    
     NSMutableArray *workingItems = [[[BNRItemStore sharedStore] allItems] mutableCopy];
