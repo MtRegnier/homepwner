@@ -20,9 +20,14 @@
 {
     static BNRImageStore *sharedStore = nil;
     
-    if (!sharedStore) {
+//    if (!sharedStore) {
+//        sharedStore = [[self alloc] initPrivate];
+//    }
+    // Time to get thread safe!
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         sharedStore = [[self alloc] initPrivate];
-    }
+    });
     
     return sharedStore;
 }

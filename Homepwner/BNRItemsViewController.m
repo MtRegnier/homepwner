@@ -210,11 +210,12 @@
 {
     // Setting up index path for 0th section, last row
     // Not doing this any more!
-    
-    
-    // Creating a new item instead
     BNRItem *newItem;
     newItem = [[BNRItemStore sharedStore] createItem];
+    // Commented out for modal view
+    /*
+    // Creating a new item instead
+    
     NSUInteger sectionPath = 0;
     NSUInteger lastRow = 0;
     NSMutableArray *workingItems = [[[BNRItemStore sharedStore] allItems] mutableCopy];
@@ -247,6 +248,21 @@
     [self.tableView insertRowsAtIndexPaths:@[indexPath] 
                           withRowAnimation:UITableViewRowAnimationTop];
     
+     */
+    
+    BNRDetailViewController *detailViewController = [[BNRDetailViewController alloc] initForNewItem:YES];
+    
+    detailViewController.item = newItem;
+    
+    detailViewController.dismissBlock = ^{
+        [self.tableView reloadData];
+    };
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
+    
+    navController.modalPresentationStyle = UIModalPresentationFormSheet;
+    
+    [self presentViewController:navController animated:YES completion:nil];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -309,7 +325,9 @@ canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BNRDetailViewController *detailViewController = [[BNRDetailViewController alloc] init];
+    // Setting up for modal view on iPad for new items
+//    BNRDetailViewController *detailViewController = [[BNRDetailViewController alloc] init];
+    BNRDetailViewController *detailViewController = [[BNRDetailViewController alloc] initForNewItem:NO];
     
     NSMutableArray *workingItems = [[[BNRItemStore sharedStore] allItems] mutableCopy];
     NSMutableArray *highValueItems = [[NSMutableArray alloc] init];

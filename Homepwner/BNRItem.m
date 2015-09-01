@@ -92,7 +92,7 @@
 
 - (void)dealloc
 {
-    NSLog(@"Destroyed: %@", self);
+//    NSLog(@"Destroyed: %@", self);
 }
 
 @end
