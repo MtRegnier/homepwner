@@ -8,7 +8,11 @@
 
 #import "BNRImageViewController.h"
 
-@interface BNRImageViewController ()
+@interface BNRImageViewController () <UIScrollViewDelegate>
+
+@property(nonatomic) CGFloat maximumZoomScale;
+@property(nonatomic) CGFloat minimumZoomScale;
+@property (nonatomic) UIImageView *imageView;
 
 @end
 
@@ -26,9 +30,19 @@
 
 - (void)loadView
 {
-    UIImageView *imageView = [[UIImageView alloc] init];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.view = imageView;
+    CGRect viewRect = CGRectMake(0, 0, 600, 600);
+    UIScrollView *zoomView = [[UIScrollView alloc] initWithFrame:viewRect];
+    zoomView.delegate = self;
+    zoomView.maximumZoomScale = 2.0;
+    zoomView.minimumZoomScale = 0.5;
+    
+    self.imageView = [[UIImageView alloc] initWithFrame:viewRect];
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    
+    zoomView.contentSize = viewRect.size;
+    [zoomView addSubview:self.imageView];
+    
+    self.view = zoomView;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -36,9 +50,37 @@
     [super viewWillAppear:animated];
     
     // Have to cast the view to UIImageView so the compiler knows it can accept setImage:
-    UIImageView *imageView = (UIImageView *)self.view;
     
-    imageView.image = self.image;
+    self.imageView.image = self.image;
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+{
+    return self.imageView;
+}
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
+{
+    CGSize boundsSize = scrollView.bounds.size;
+    CGRect frameToCenter = self.imageView.frame;
+    
+    // center horizontally
+    if (frameToCenter.size.width < boundsSize.width)
+    {
+        frameToCenter.origin.x = (boundsSize.width - frameToCenter.size.width) / 2;
+    } else {
+        frameToCenter.origin.x = 0;
+    }
+    
+    // center vertically
+    if (frameToCenter.size.height < boundsSize.height) 
+    {
+        frameToCenter.origin.y = (boundsSize.height - frameToCenter.size.height) / 2;
+    } else {
+        frameToCenter.origin.y = 0;
+    }
+    
+    self.imageView.frame = frameToCenter;
 }
 
 @end

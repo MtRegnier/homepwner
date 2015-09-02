@@ -228,7 +228,7 @@
     
     __weak BNRItemCell *weakCell = cell;
     cell.actionBlock = ^{
-        NSLog(@"Going to show image for %@", item.itemName);
+//        NSLog(@"Going to show image for %@", item.itemName);
         
         if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
             NSString *itemKey = item.itemKey;
