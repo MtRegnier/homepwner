@@ -59,7 +59,12 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    BOOL success = [[BNRItemStore sharedStore] saveChanges];
+    if (success) {
+        NSLog(@"Saved all of the BNRItems");
+    } else {
+        NSLog(@"Could not save any of the BNRItems");
+    }
 }
 
 @end

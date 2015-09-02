@@ -69,7 +69,7 @@
     NSMutableArray *lowValueItems = [[NSMutableArray alloc] init];
     for (int i = 0; i < [workingItems count]; i++) {
         BNRItem *loopItem = workingItems[i];
-        if (loopItem.valueInDollars > 100) {
+        if (loopItem.valueInDollars >= 100) {
             [highValueItems addObject:loopItem];
         } else {
             [lowValueItems addObject:loopItem];
@@ -95,7 +95,7 @@
     if ([workingItems count]) {
         for (int i = 0; i < [workingItems count]; i++) {
             BNRItem *loopItem = workingItems[i];
-            if (loopItem.valueInDollars > 100) {
+            if (loopItem.valueInDollars >= 100) {
                 [highValueItems addObject:loopItem];
             } else {
                 [lowValueItems addObject:loopItem];
@@ -159,7 +159,7 @@
     if ([workingItems count]) {
         for (int i = 0; i < [workingItems count]; i++) {
             BNRItem *loopItem = workingItems[i];
-            if (loopItem.valueInDollars > 100) {
+            if (loopItem.valueInDollars >= 100) {
                 [highValueItems addObject:loopItem];
             } else {
                 [lowValueItems addObject:loopItem];
@@ -181,8 +181,12 @@
             cell.valueLabel.text = [NSString stringWithFormat:@"%d", item.valueInDollars];
             cell.thumbnailView.image = item.thumbnail;
             
-            // Gold Challenge
-//            cell.nameLabel.font = [UIFont systemFontOfSize:20];
+            // Chapter 19 Bronze Challenge
+            if (item.valueInDollars >= 100) {
+                cell.valueLabel.textColor = [UIColor greenColor];
+            } else {
+                cell.valueLabel.textColor = [UIColor redColor];
+            }
         } else {
             cell.nameLabel.text = @"No more items!";
             cell.serialNumberLabel.text = @"";
@@ -194,18 +198,22 @@
         if (indexPath.section == 0) {
             item = highValueItems[indexPath.row];
             cell.nameLabel.text = item.itemName;
-//            cell.textLabel.font = [UIFont systemFontOfSize:20];
             cell.serialNumberLabel.text = item.serialNumber;
             cell.valueLabel.text = [NSString stringWithFormat:@"%d", item.valueInDollars];
             cell.thumbnailView.image = item.thumbnail;
             
+            // Chapter 19 Bronze Challenge
+            cell.valueLabel.textColor = [UIColor greenColor];
+            
         } else if (indexPath.section == 1) {
             item = lowValueItems[indexPath.row];
             cell.nameLabel.text = item.itemName;
-//            cell.textLabel.font = [UIFont systemFontOfSize:20];
             cell.serialNumberLabel.text = item.serialNumber;
             cell.valueLabel.text = [NSString stringWithFormat:@"%d", item.valueInDollars];
             cell.thumbnailView.image = item.thumbnail;
+            
+            // Chapter 19 Bronze Challenge
+            cell.valueLabel.textColor = [UIColor redColor];
         } else {
             cell.nameLabel.text = @"No more items!";
             cell.serialNumberLabel.text = @"";
@@ -402,7 +410,7 @@ canMoveRowAtIndexPath:(NSIndexPath *)indexPath
     if ([workingItems count]) {
         for (int i = 0; i < [workingItems count]; i++) {
             BNRItem *loopItem = workingItems[i];
-            if (loopItem.valueInDollars > 100) {
+            if (loopItem.valueInDollars >= 100) {
                 [highValueItems addObject:loopItem];
             } else {
                 [lowValueItems addObject:loopItem];

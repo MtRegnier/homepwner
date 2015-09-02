@@ -83,8 +83,9 @@
     UIImage *imageToDisplay = [[BNRImageStore sharedStore] imageForKey:imageKey];
     
     // Display that image in the imageView
-    self.imageView.image = imageToDisplay;
-    
+    if (imageToDisplay) {
+        self.imageView.image = imageToDisplay;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated

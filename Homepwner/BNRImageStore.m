@@ -90,8 +90,6 @@
         
         if (result) {
             self.dictionary[key] = result;
-        } else {
-            NSLog(@"Error: unable to find %@", [self imagePathForKey:key]);
         }
     }
     
