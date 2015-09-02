@@ -10,10 +10,13 @@
 #import "BNRItemStore.h"
 #import "BNRItem.h"
 #import "BNRDetailViewController.h"
+#import "BNRItemCell.h"
+#import "BNRImageViewController.h"
+#import "BNRImageStore.h"
 
-@interface BNRItemsViewController ()
+@interface BNRItemsViewController () <UIPopoverControllerDelegate>
 
-
+@property (nonatomic, strong) UIPopoverController *imagePopover;
 
 @end
 
@@ -66,7 +69,7 @@
     NSMutableArray *lowValueItems = [[NSMutableArray alloc] init];
     for (int i = 0; i < [workingItems count]; i++) {
         BNRItem *loopItem = workingItems[i];
-        if (loopItem.valueInDollars > 50) {
+        if (loopItem.valueInDollars > 100) {
             [highValueItems addObject:loopItem];
         } else {
             [lowValueItems addObject:loopItem];
@@ -92,7 +95,7 @@
     if ([workingItems count]) {
         for (int i = 0; i < [workingItems count]; i++) {
             BNRItem *loopItem = workingItems[i];
-            if (loopItem.valueInDollars > 50) {
+            if (loopItem.valueInDollars > 100) {
                 [highValueItems addObject:loopItem];
             } else {
                 [lowValueItems addObject:loopItem];
@@ -131,8 +134,14 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Setting up an instance of the cell
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
+    // Using custom cell instead
+//    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
+    UINib *nib = [UINib nibWithNibName:@"BNRItemCell" bundle:nil];
     
+    // Register the nib with the cell
+    [self.tableView registerNib:nib forCellReuseIdentifier:@"BNRItemCell"];
+    
+    BNRItemCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BNRItemCell" forIndexPath:indexPath];
     // Reusing cells instead
 //    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
     BNRItem *item;
@@ -150,7 +159,7 @@
     if ([workingItems count]) {
         for (int i = 0; i < [workingItems count]; i++) {
             BNRItem *loopItem = workingItems[i];
-            if (loopItem.valueInDollars > 50) {
+            if (loopItem.valueInDollars > 100) {
                 [highValueItems addObject:loopItem];
             } else {
                 [lowValueItems addObject:loopItem];
@@ -159,31 +168,86 @@
     }
     // If one section, use the constant row, set label explicitly
     if (tableView.numberOfSections == 1) {
-        cell.textLabel.text = @"No more items!";
+        cell.nameLabel.text = @"No more items!";
+        cell.serialNumberLabel.text = @"";
+        cell.valueLabel.text = @"";
+        cell.thumbnailView.image = nil;
     } else if (tableView.numberOfSections == 2) {
     // If two sections, use description, then constant label
         if (indexPath.section == 0) {
             item = workingItems[indexPath.row];
-            cell.textLabel.text = [item description];
+            cell.nameLabel.text = item.itemName;
+            cell.serialNumberLabel.text = item.serialNumber;
+            cell.valueLabel.text = [NSString stringWithFormat:@"%d", item.valueInDollars];
+            cell.thumbnailView.image = item.thumbnail;
+            
             // Gold Challenge
-            cell.textLabel.font = [UIFont systemFontOfSize:20];
+//            cell.nameLabel.font = [UIFont systemFontOfSize:20];
         } else {
-            cell.textLabel.text = @"No more items!";
+            cell.nameLabel.text = @"No more items!";
+            cell.serialNumberLabel.text = @"";
+            cell.valueLabel.text = @"";
+            cell.thumbnailView.image = nil;
         }
     } else if (tableView.numberOfSections == 3) {
     // If three sections, split by value high then low, then constant
         if (indexPath.section == 0) {
             item = highValueItems[indexPath.row];
-            cell.textLabel.text = [item description];
-            cell.textLabel.font = [UIFont systemFontOfSize:20];
+            cell.nameLabel.text = item.itemName;
+//            cell.textLabel.font = [UIFont systemFontOfSize:20];
+            cell.serialNumberLabel.text = item.serialNumber;
+            cell.valueLabel.text = [NSString stringWithFormat:@"%d", item.valueInDollars];
+            cell.thumbnailView.image = item.thumbnail;
+            
         } else if (indexPath.section == 1) {
             item = lowValueItems[indexPath.row];
-            cell.textLabel.text = [item description];
-            cell.textLabel.font = [UIFont systemFontOfSize:20];
+            cell.nameLabel.text = item.itemName;
+//            cell.textLabel.font = [UIFont systemFontOfSize:20];
+            cell.serialNumberLabel.text = item.serialNumber;
+            cell.valueLabel.text = [NSString stringWithFormat:@"%d", item.valueInDollars];
+            cell.thumbnailView.image = item.thumbnail;
         } else {
-            cell.textLabel.text = @"No more items!";
+            cell.nameLabel.text = @"No more items!";
+            cell.serialNumberLabel.text = @"";
+            cell.valueLabel.text = @"";
+            cell.thumbnailView.image = nil;
         }
     }
+    
+    if (!cell.thumbnailView.image) {
+        return cell;
+    }
+    
+    __weak BNRItemCell *weakCell = cell;
+    cell.actionBlock = ^{
+        NSLog(@"Going to show image for %@", item.itemName);
+        
+        if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+            NSString *itemKey = item.itemKey;
+            
+            // If no image, no need to display anything
+            UIImage *img = [[BNRImageStore sharedStore] imageForKey:itemKey];
+            if (!img) {
+                return;
+            }
+            
+            // Make a rectangle for the frame of the thumbnail relative to the table view
+            BNRItemCell *strongCell = weakCell;
+            CGRect rect = [self.view convertRect:strongCell.thumbnailView.bounds fromView:strongCell.thumbnailView];
+            
+            // Set up a BNRImageViewController
+            BNRImageViewController *ivc = [[BNRImageViewController alloc] init];
+            ivc.image = img;
+            
+            self.imagePopover = [[UIPopoverController alloc] initWithContentViewController:ivc];
+            self.imagePopover.delegate = self;
+            self.imagePopover.popoverContentSize = CGSizeMake(600, 600);
+            [self.imagePopover presentPopoverFromRect:rect 
+                                               inView:self.view 
+                             permittedArrowDirections:UIPopoverArrowDirectionAny 
+                                             animated:YES];
+        }
+    };
     
     return cell;
 }
@@ -227,7 +291,7 @@
     if ([workingItems count]) {
         for (int i = 0; i < [workingItems count]; i++) {
             BNRItem *loopItem = workingItems[i];
-            if (loopItem.valueInDollars > 50) {
+            if (loopItem.valueInDollars > 100) {
                 [highValueItems addObject:loopItem];
                 lastRow = [highValueItems indexOfObjectIdenticalTo:loopItem];
                 sectionPath = 0;
@@ -338,7 +402,7 @@ canMoveRowAtIndexPath:(NSIndexPath *)indexPath
     if ([workingItems count]) {
         for (int i = 0; i < [workingItems count]; i++) {
             BNRItem *loopItem = workingItems[i];
-            if (loopItem.valueInDollars > 50) {
+            if (loopItem.valueInDollars > 100) {
                 [highValueItems addObject:loopItem];
             } else {
                 [lowValueItems addObject:loopItem];
@@ -346,6 +410,7 @@ canMoveRowAtIndexPath:(NSIndexPath *)indexPath
         }
     }
     BNRItem *selectedItem;
+    
     if (tableView.numberOfSections == 2) {
          selectedItem = workingItems[indexPath.row];
     } else if (tableView.numberOfSections == 3) {
@@ -355,13 +420,35 @@ canMoveRowAtIndexPath:(NSIndexPath *)indexPath
             selectedItem = lowValueItems[indexPath.row];
         }
     }
-        
+    detailViewController.item = selectedItem;    
+    if (tableView.numberOfSections == 2) {
+        if (indexPath.section == 0) {
+            // Place on top of navController's stack
+            [self.navigationController pushViewController:detailViewController animated:YES];
+        }
+    } else if (tableView.numberOfSections == 3) {
+        if (indexPath.section < 2) {
+            [self.navigationController pushViewController:detailViewController animated:YES];
+        }
+    }
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Determine if row is selectable based on the NSIndexPath.
     
-    detailViewController.item = selectedItem;
+    if (tableView.numberOfSections == 2) {
+        if (indexPath.section == 0) {
+            // Place on top of navController's stack
+            return indexPath;
+        }
+    } else if (tableView.numberOfSections == 3) {
+        if (indexPath.section < 2) {
+            return indexPath;
+        }
+    }
     
-    // Place on top of navController's stack
-    [self.navigationController pushViewController:detailViewController animated:YES];
-    
+    return nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -371,6 +458,12 @@ canMoveRowAtIndexPath:(NSIndexPath *)indexPath
     [self.tableView reloadData];
 }
 
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+{
+    self.imagePopover = nil;
+    
+    [self.tableView reloadData];
+}
 
 @end
 // The following white space is brought to you by Dane's disdain for staring at the bottom of his screen

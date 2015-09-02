@@ -171,12 +171,15 @@
     // Grab the picked image from dictionary
     UIImage *image = info[UIImagePickerControllerEditedImage];
     
+    [self.item setThumbnailFromImage:image];
+    
     // Store the image for the key
     [[BNRImageStore sharedStore] setImage:image
                                    forKey:self.item.itemKey];
     
     // Put it on the screen in the image view
     self.imageView.image = image;
+    [self.view setNeedsDisplay];
     
     // Take the picker off the screen
     // Updating for popover on iPad
