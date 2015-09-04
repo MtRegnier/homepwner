@@ -1,34 +1,28 @@
 //
 //  BNRItem.h
-//  RandomItems
+//  Homepwner
 //
-//  Created by Dane on 8/17/15.
+//  Created by Dane on 9/4/15.
 //  Copyright (c) 2015 Regnier Design. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 #import <UIKit/UIKit.h>
 
-@interface BNRItem : NSObject <NSCoding>
+@class NSManagedObject;
 
-@property (strong, nonatomic) NSDate *dateCreated;
-@property (strong, nonatomic)NSString *itemName;
-@property (strong, nonatomic)NSString *serialNumber;
-@property (nonatomic)int valueInDollars;
-@property (nonatomic, copy)NSString *itemKey;
+@interface BNRItem : NSManagedObject
+
+@property (nonatomic, strong) NSString * itemName;
+@property (nonatomic, strong) NSString * serialNumber;
+@property (nonatomic) int valueInDollars;
+@property (nonatomic, strong) NSDate * dateCreated;
+@property (nonatomic, strong) NSString * itemKey;
 @property (nonatomic, strong) UIImage *thumbnail;
-
-+ (instancetype)randomItem;
-
-// Designated Initializer
-- (instancetype)initWithItemName:(NSString *)name valueInDollars:(int)value serialNumber:(NSString *)sNumber;
-
-- (instancetype)initWithItemName:(NSString *)name;
-- (instancetype)initWithItemName:(NSString *)name serialNumber:(NSString *)sNumber;
+@property (nonatomic) double orderingValue;
+@property (nonatomic, strong) NSManagedObject *assetType;
 
 - (void)setThumbnailFromImage:(UIImage *)image;
-
-// Read Only
-- (void)setDateCreated:(NSDate *)date;
 
 @end
