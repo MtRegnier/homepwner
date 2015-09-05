@@ -17,8 +17,9 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+    // Move this into an if statement for if state restoration didn't work
+    if (!self.window.rootViewController) {
+
     // Creating BNRItemsViewController
     BNRItemsViewController *itemsViewController = [[BNRItemsViewController alloc] init];
     
@@ -28,10 +29,13 @@
     // Placing in view hierarchy
 //    self.window.rootViewController = itemsViewController;
     
+    // Setting up restoration identifier for navController
+    navController.restorationIdentifier = NSStringFromClass([navController class]);
+    
     // Putting the nav view in the hierarchy
     self.window.rootViewController = navController;
+    }
     
-    self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -67,4 +71,54 @@
     }
 }
 
+#pragma mark State Restoration
+- (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder
+{
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder
+{
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    
+    return YES;
+}
+
+- (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder
+{
+    UIViewController *vc = [[UINavigationController alloc] init];
+    
+    // Last object in path array is restorationIdentifier for this VC
+    vc.restorationIdentifier = [identifierComponents lastObject];
+    
+    // If there is only one component, this is the RVC
+    if ([identifierComponents count] == 1) {
+        self.window.rootViewController = vc;
+    }
+    
+    return vc;
+}
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

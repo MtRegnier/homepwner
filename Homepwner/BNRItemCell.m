@@ -27,8 +27,10 @@
 {
     UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     self.nameLabel.font = font;
-    self.serialNumberLabel.font = font;
     self.valueLabel.font = font;
+    
+    UIFont *serialFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    self.serialNumberLabel.font = serialFont;
     
     static NSDictionary *imageSizeDictionary;
     if (!imageSizeDictionary) {

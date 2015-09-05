@@ -14,7 +14,7 @@
 #import "BNRImageViewController.h"
 #import "BNRImageStore.h"
 
-@interface BNRItemsViewController () <UIPopoverControllerDelegate>
+@interface BNRItemsViewController () <UIPopoverControllerDelegate, UIViewControllerRestoration, UIDataSourceModelAssociation>
 
 @property (nonatomic, strong) UIPopoverController *imagePopover;
 
@@ -26,29 +26,32 @@
 - (instancetype)init
 {
     self = [super initWithStyle:UITableViewStylePlain];
-//    if (self) {
+    if (self) {
 ////         No longer needed, use new button instead
 //        for (int i = 0; i < 5; i++) {
 //            [[BNRItemStore sharedStore] createItem];
 //        }
 //    }
-    // Setting up the nav bar
-    UINavigationItem *navItem = self.navigationItem;
-    navItem.title = @"Homepwner";
+        // Setting up the nav bar
+        UINavigationItem *navItem = self.navigationItem;
+        navItem.title = @"Homepwner";
     
-    // Create a bar button for adding new items
-    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+        self.restorationIdentifier = NSStringFromClass([self class]);
+        self.restorationClass = [self class];
+        
+        // Create a bar button for adding new items
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                          target:self 
                                                                          action:@selector(addNewItem:)];
-    navItem.rightBarButtonItem = bbi;
-    navItem.leftBarButtonItem = self.editButtonItem;
+        navItem.rightBarButtonItem = bbi;
+        navItem.leftBarButtonItem = self.editButtonItem;
     
-    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc addObserver:self 
-           selector:@selector(updateTableViewForDynamicTypeSize) 
-               name:UIContentSizeCategoryDidChangeNotification 
-             object:nil];
-    
+        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        [nc addObserver:self 
+               selector:@selector(updateTableViewForDynamicTypeSize) 
+                   name:UIContentSizeCategoryDidChangeNotification 
+                 object:nil];
+    }
     return self;
 }
 
@@ -64,6 +67,8 @@
     [super viewDidLoad];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
+    
+    self.tableView.restorationIdentifier = @"BNRItemsViewControllerTableView";
 }
 
 // Table view setup
@@ -293,43 +298,6 @@
     // Not doing this any more!
     BNRItem *newItem;
     newItem = [[BNRItemStore sharedStore] createItem];
-    // Commented out for modal view
-    /*
-    // Creating a new item instead
-    
-    NSUInteger sectionPath = 0;
-    NSUInteger lastRow = 0;
-    NSMutableArray *workingItems = [[[BNRItemStore sharedStore] allItems] mutableCopy];
-    NSMutableArray *highValueItems = [[NSMutableArray alloc] init];
-    NSMutableArray *lowValueItems = [[NSMutableArray alloc] init];
-    if ([workingItems count]) {
-        for (int i = 0; i < [workingItems count]; i++) {
-            BNRItem *loopItem = workingItems[i];
-            if (loopItem.valueInDollars > 100) {
-                [highValueItems addObject:loopItem];
-                lastRow = [highValueItems indexOfObjectIdenticalTo:loopItem];
-                sectionPath = 0;
-            } else {
-                [lowValueItems addObject:loopItem];
-                if (self.tableView.numberOfSections == 3) {
-                    sectionPath = 1;
-                }
-                lastRow = [lowValueItems indexOfObjectIdenticalTo:loopItem];
-                if (lastRow > 1) {
-                    lastRow -= 1;
-                }
-            }
-        }
-    }
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lastRow
-                                                inSection:sectionPath];
-    
-    // Adding this row to the table
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] 
-                          withRowAnimation:UITableViewRowAnimationTop];
-    
-     */
     
     BNRDetailViewController *detailViewController = [[BNRDetailViewController alloc] initForNewItem:YES];
     
@@ -340,7 +308,8 @@
     };
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
-    
+    navController.restorationIdentifier = NSStringFromClass([navController class]);
+    navController.restorationClass = [navController class];
     navController.modalPresentationStyle = UIModalPresentationFormSheet;
     
     [self presentViewController:navController animated:YES completion:nil];
@@ -504,6 +473,63 @@ canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc removeObserver:self];
+}
+
+#pragma mark State Restoration
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder
+{
+    return [[self alloc] init];
+}
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [coder encodeBool:self.isEditing forKey:@"TableViewIsEditing"];
+    
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    self.editing = [coder decodeBoolForKey:@"TableViewIsEditing"];
+    
+    [super decodeRestorableStateWithCoder:coder];
+}
+
+- (NSString *)modelIdentifierForElementAtIndexPath:(NSIndexPath *)idx inView:(UIView *)view
+{
+    NSString *identifier = nil;
+    
+    if (idx && view) {
+        // Returning an identifier of the given NSIndexPath, in case next time the data source changes
+        BNRItem *item = [[BNRItemStore sharedStore] allItems][idx.row];
+        identifier = item.itemKey;
+    }
+    
+    return identifier;
+}
+
+- (NSIndexPath *)indexPathForElementWithModelIdentifier:(NSString *)identifier inView:(UIView *)view
+{
+    NSIndexPath *indexPath = nil;
+    
+    if (identifier && view) {
+        NSArray *items = [[BNRItemStore sharedStore] allItems];
+        for (BNRItem *item in items) {
+            if ([identifier isEqualToString:item.itemKey]) {
+                int row = (int)[items indexOfObjectIdenticalTo:item];
+                if (self.tableView.numberOfSections == 3) {
+                    if (item.valueInDollars >= 100) {
+                        indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+                    } else {
+                        indexPath = [NSIndexPath indexPathForRow:row inSection:1];
+                    }
+                } else {
+                    indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+                }
+            }
+        }
+    }
+    return indexPath;
 }
 
 @end
