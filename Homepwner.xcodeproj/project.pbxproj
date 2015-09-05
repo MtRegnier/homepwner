@@ -26,6 +26,7 @@
 		35A013221B96625200B525F3 /* BNRItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 35A013211B96625200B525F3 /* BNRItemCell.m */; };
 		35A013241B9662B000B525F3 /* BNRItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35A013231B9662B000B525F3 /* BNRItemCell.xib */; };
 		35C756CE1B97955000CB9BAC /* BNRImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C756CD1B97955000CB9BAC /* BNRImageViewController.m */; };
+		35F4AC331B9B35E900479375 /* BNRAssetTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35F4AC321B9B35E900479375 /* BNRAssetTypeViewController.m */; };
 		35FA12F71B8B9EB000F559BA /* Bigger-Small-Crosshairs.png in Resources */ = {isa = PBXBuildFile; fileRef = 35FA12F61B8B9EB000F559BA /* Bigger-Small-Crosshairs.png */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +74,8 @@
 		35A013231B9662B000B525F3 /* BNRItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BNRItemCell.xib; sourceTree = "<group>"; };
 		35C756CC1B97955000CB9BAC /* BNRImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNRImageViewController.h; sourceTree = "<group>"; };
 		35C756CD1B97955000CB9BAC /* BNRImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNRImageViewController.m; sourceTree = "<group>"; };
+		35F4AC311B9B35E900479375 /* BNRAssetTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNRAssetTypeViewController.h; sourceTree = "<group>"; };
+		35F4AC321B9B35E900479375 /* BNRAssetTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNRAssetTypeViewController.m; sourceTree = "<group>"; };
 		35FA12F61B8B9EB000F559BA /* Bigger-Small-Crosshairs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bigger-Small-Crosshairs.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,6 +124,7 @@
 				35C756CC1B97955000CB9BAC /* BNRImageViewController.h */,
 				357EEC961B88E094005603CC /* BNRDetailViewController.h */,
 				357EEC9B1B890A84005603CC /* BNRDateChangeViewController.h */,
+				35F4AC311B9B35E900479375 /* BNRAssetTypeViewController.h */,
 				350AC2921B858039000F9E74 /* BNRItemStore.h */,
 				359E56C71B8A386600CD5D4A /* BNRImageStore.h */,
 				356F4DF31B9A2760006FEDE8 /* BNRImageTransformer.h */,
@@ -135,6 +139,7 @@
 				357EEC981B88E094005603CC /* BNRDetailViewController.xib */,
 				357EEC9C1B890A84005603CC /* BNRDateChangeViewController.m */,
 				357EEC9D1B890A84005603CC /* BNRDateChangeViewController.xib */,
+				35F4AC321B9B35E900479375 /* BNRAssetTypeViewController.m */,
 				350AC2931B858039000F9E74 /* BNRItemStore.m */,
 				359E56C81B8A386600CD5D4A /* BNRImageStore.m */,
 				356F4DF41B9A2760006FEDE8 /* BNRImageTransformer.m */,
@@ -283,6 +288,7 @@
 				35A013221B96625200B525F3 /* BNRItemCell.m in Sources */,
 				350AC2941B858039000F9E74 /* BNRItemStore.m in Sources */,
 				350AC28E1B857A4C000F9E74 /* BNRItemsViewController.m in Sources */,
+				35F4AC331B9B35E900479375 /* BNRAssetTypeViewController.m in Sources */,
 				356F4DF51B9A2760006FEDE8 /* BNRImageTransformer.m in Sources */,
 				356F4DF21B9A25CB006FEDE8 /* Homepwner.xcdatamodeld in Sources */,
 				359E56C91B8A386600CD5D4A /* BNRImageStore.m in Sources */,
