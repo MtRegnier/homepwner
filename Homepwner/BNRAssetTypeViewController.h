@@ -11,6 +11,7 @@
 
 @interface BNRAssetTypeViewController : UITableViewController
 
+@property (nonatomic, copy) void (^dismissBlock)(void);
 @property (nonatomic, strong) BNRItem *item;
 
 @end

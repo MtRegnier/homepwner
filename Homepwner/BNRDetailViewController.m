@@ -27,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *serialNumberLabel;
 @property (weak, nonatomic) IBOutlet UILabel *valuelabel;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *assetTypeButton;
+@property (strong, nonatomic) UIPopoverController *assetTypePopover;
 
 @end
 
@@ -253,8 +254,9 @@
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
-    NSLog(@"User dismissed popover");
+//    NSLog(@"User dismissed popover");
     self.imagePickerPopover = nil;
+    self.assetTypePopover = nil;
 }
 
 - (void)save:(id)sender
@@ -298,9 +300,22 @@
     BNRAssetTypeViewController *avc = [[BNRAssetTypeViewController alloc] init];
     avc.item = self.item;
     
-    [self.navigationController pushViewController:avc animated:YES];
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        self.assetTypePopover = [[UIPopoverController alloc] initWithContentViewController:avc];
+        avc.dismissBlock = ^{
+            [self.assetTypePopover dismissPopoverAnimated:YES];
+            self.assetTypePopover = nil;
+            
+            NSString *typeLabel = [self.item.assetType valueForKey:@"label"];
+            self.assetTypeButton.title = [NSString stringWithFormat:@"Type: %@", typeLabel];
+        };
+        
+        [self.assetTypePopover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    } else {
+        [self.navigationController pushViewController:avc animated:YES];
+    }
+    
 }
-
 
 @end
 
