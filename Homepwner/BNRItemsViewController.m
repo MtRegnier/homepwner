@@ -34,7 +34,7 @@
 //    }
         // Setting up the nav bar
         UINavigationItem *navItem = self.navigationItem;
-        navItem.title = @"Homepwner";
+        navItem.title = NSLocalizedString(@"Homepwner", @"Name of application");
     
         self.restorationIdentifier = NSStringFromClass([self class]);
         self.restorationClass = [self class];
@@ -51,6 +51,10 @@
                selector:@selector(updateTableViewForDynamicTypeSize) 
                    name:UIContentSizeCategoryDidChangeNotification 
                  object:nil];
+        [nc addObserver:self
+               selector:@selector(localeChanged:)
+                                  name:NSCurrentLocaleDidChangeNotification
+                                  object:nil];
     }
     return self;
 }
@@ -177,6 +181,12 @@
             }
         }
     }
+    // Create a nubmer formatter for currency
+    static NSNumberFormatter *currencyFormatter = nil;
+    if (currencyFormatter == nil) {
+        currencyFormatter = [[NSNumberFormatter alloc] init];
+        currencyFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
+    }
     // If one section, use the constant row, set label explicitly
     if (tableView.numberOfSections == 1) {
         cell.nameLabel.text = @"No more items!";
@@ -189,7 +199,7 @@
             item = workingItems[indexPath.row];
             cell.nameLabel.text = item.itemName;
             cell.serialNumberLabel.text = item.serialNumber;
-            cell.valueLabel.text = [NSString stringWithFormat:@"%d", item.valueInDollars];
+            cell.valueLabel.text = [currencyFormatter stringFromNumber:@(item.valueInDollars)];
             cell.thumbnailView.image = item.thumbnail;
             
             // Chapter 19 Bronze Challenge
@@ -210,7 +220,7 @@
             item = highValueItems[indexPath.row];
             cell.nameLabel.text = item.itemName;
             cell.serialNumberLabel.text = item.serialNumber;
-            cell.valueLabel.text = [NSString stringWithFormat:@"%d", item.valueInDollars];
+            cell.valueLabel.text = [currencyFormatter stringFromNumber:@(item.valueInDollars)];
             cell.thumbnailView.image = item.thumbnail;
             
             // Chapter 19 Bronze Challenge
@@ -220,7 +230,7 @@
             item = lowValueItems[indexPath.row];
             cell.nameLabel.text = item.itemName;
             cell.serialNumberLabel.text = item.serialNumber;
-            cell.valueLabel.text = [NSString stringWithFormat:@"%d", item.valueInDollars];
+            cell.valueLabel.text = [currencyFormatter stringFromNumber:@(item.valueInDollars)];
             cell.thumbnailView.image = item.thumbnail;
             
             // Chapter 19 Bronze Challenge
@@ -270,27 +280,6 @@
     
     return cell;
 }
-
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if (tableView.numberOfSections == 1) {
-//        return 44.0;
-//    } else if (tableView.numberOfSections == 2) {
-//        if (indexPath.section == 0) {
-//            return 60.0;
-//        } else {
-//            return 44.0;
-//        }
-//    } else if (tableView.numberOfSections == 3) {
-//        if (indexPath.section == 2) {
-//            return 44.0;
-//        } else {
-//            return 60.0;
-//        }
-//    } else {
-//        return 0.0;
-//    }
-//}
   
 - (IBAction)addNewItem:(id)sender
 {
@@ -530,6 +519,13 @@ canMoveRowAtIndexPath:(NSIndexPath *)indexPath
         }
     }
     return indexPath;
+}
+
+#pragma mark Localization
+
+- (void)localeChanged:(NSNotification *)note
+{
+    [self.tableView reloadData];
 }
 
 @end

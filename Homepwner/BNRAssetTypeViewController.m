@@ -17,7 +17,11 @@
 #pragma clang diagnostic ignored "-Wobjc-designated-initializers"
 - (instancetype)init
 {
-    return [super initWithStyle:UITableViewStylePlain];
+    self = [super initWithStyle:UITableViewStylePlain];
+    if (self) {
+        self.navigationItem.title = NSLocalizedString(@"Asset Type", @"BNRAssetTypeViewController title");
+    }
+    return self;
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style
