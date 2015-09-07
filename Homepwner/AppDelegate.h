@@ -12,6 +12,8 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
+extern NSString * const BNRNextItemValuePrefsKey;
+extern NSString * const BNRNextItemNamePrefsKey;
 
 @end
 

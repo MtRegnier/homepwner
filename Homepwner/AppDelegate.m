@@ -14,7 +14,20 @@
 
 @end
 
+NSString * const BNRNextItemValuePrefsKey = @"NextItemValue";
+NSString * const BNRNextItemNamePrefsKey = @"NextItemName";
+
+
 @implementation AppDelegate
+
+#pragma mark Setting up User Preferences
+
++ (void)initialize
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *factorySettings = @{BNRNextItemValuePrefsKey : @75, BNRNextItemNamePrefsKey : @"Coffee Cup"};
+    [defaults registerDefaults:factorySettings];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Move this into an if statement for if state restoration didn't work

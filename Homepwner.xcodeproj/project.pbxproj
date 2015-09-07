@@ -25,6 +25,7 @@
 		359E56C91B8A386600CD5D4A /* BNRImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E56C81B8A386600CD5D4A /* BNRImageStore.m */; };
 		35A013221B96625200B525F3 /* BNRItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 35A013211B96625200B525F3 /* BNRItemCell.m */; };
 		35A013241B9662B000B525F3 /* BNRItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35A013231B9662B000B525F3 /* BNRItemCell.xib */; };
+		35BAF1E81B9E017900FA336F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35BAF1E71B9E017900FA336F /* Settings.bundle */; };
 		35C756CE1B97955000CB9BAC /* BNRImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C756CD1B97955000CB9BAC /* BNRImageViewController.m */; };
 		35F4AC331B9B35E900479375 /* BNRAssetTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35F4AC321B9B35E900479375 /* BNRAssetTypeViewController.m */; };
 		35F4AC341B9B9E4A00479375 /* BNRDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35F4AC361B9B9E4A00479375 /* BNRDetailViewController.xib */; };
@@ -74,6 +75,7 @@
 		35A013201B96625200B525F3 /* BNRItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNRItemCell.h; sourceTree = "<group>"; };
 		35A013211B96625200B525F3 /* BNRItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNRItemCell.m; sourceTree = "<group>"; };
 		35A013231B9662B000B525F3 /* BNRItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BNRItemCell.xib; sourceTree = "<group>"; };
+		35BAF1E71B9E017900FA336F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		35C756CC1B97955000CB9BAC /* BNRImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNRImageViewController.h; sourceTree = "<group>"; };
 		35C756CD1B97955000CB9BAC /* BNRImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNRImageViewController.m; sourceTree = "<group>"; };
 		35F4AC311B9B35E900479375 /* BNRAssetTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNRAssetTypeViewController.h; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 		350AC2601B857773000F9E74 = {
 			isa = PBXGroup;
 			children = (
+				35BAF1E71B9E017900FA336F /* Settings.bundle */,
 				350AC26B1B857773000F9E74 /* Homepwner */,
 				350AC27F1B857773000F9E74 /* HomepwnerTests */,
 				350AC26A1B857773000F9E74 /* Products */,
@@ -273,6 +276,7 @@
 				35A013241B9662B000B525F3 /* BNRItemCell.xib in Resources */,
 				355171CF1B9BABDE004810BC /* Localizable.strings in Resources */,
 				3524FBD11B87C38000F2CA2E /* BackgroundImage.jpg in Resources */,
+				35BAF1E81B9E017900FA336F /* Settings.bundle in Resources */,
 				35F4AC341B9B9E4A00479375 /* BNRDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
